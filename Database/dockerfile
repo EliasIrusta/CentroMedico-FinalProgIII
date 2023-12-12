@@ -1,0 +1,40 @@
+#selecciona una imagen base de node
+
+FROM node:alpine
+
+#establece el directorio de trabajo
+WORKDIR /app
+
+
+#copiar los archivos package json para obtener las dependencias
+COPY package*.json . 
+#espacio punto
+
+#instalar las dependecias
+
+RUN npm install
+
+#copiar los archivos del proyecto
+
+COPY . .
+#espacio punto espacio punto
+
+#ejecutar la construccion del proyecto final
+#RUN npm run build
+
+#declarar el puerto donde se va a ejecutar
+EXPOSE 3000
+
+#define el comando para iniciar la ejecucion
+CMD [ "npm", "start" ]
+
+
+# Ejecuta el siguiente comando para construir la imagen Docker:
+# docker build -t eliasirusta/frontend .
+
+# Luego, ejecutar un contenedor a partir de la imagen creada:
+# docker run -p 3000:3000 -d eliasirusta/frontend
+# docker run --name frontend -p 3000:3000 -d eliasirusta/frontend
+
+#  Dockerfile for Node Express Backend
+
