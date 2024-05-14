@@ -10,7 +10,7 @@ function Logout() {
   const salir = () => {
     localStorage.clear()
     window.location.href = "/";
-    window.location.reload()
+    
   }
 
   return (

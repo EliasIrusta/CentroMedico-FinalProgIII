@@ -5,11 +5,10 @@ import LayoutMedico from './modules/LayoutMedico'
 import ListarUsuarios from './modules/Usuarios/ListarUsuarios'
 import EditarUsuario from './modules/Usuarios/EditarUsuario'
 import CreateUser from './components/CreateUser'
-
+import ModificarTurno from './modules/Secretaria/Turnos/Modificar'
 import ListarPacientes from './modules/Pacientes/ListarPacientes'
 import EditarPaciente from './modules/Pacientes/EditarPaciente'
 import BuscarTurno from './modules/Secretaria/Turnos/Buscar'
-import ModificarTurno from './modules/Secretaria/Turnos/Modificar'
 import Turnos from './modules/Secretaria/Turnos'
 import { useState, useEffect } from 'react'
 import Login from './modules/Login'
@@ -22,12 +21,10 @@ import Cobros from './modules/Secretaria/Cobros'
 import PaymentForm from './modules/Secretaria/Cobros/PaymentForm'
 
 
-
 const Secretaria = () => {
 
   return (
     <div className="App">
-
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
@@ -44,8 +41,7 @@ const Secretaria = () => {
             </Route>
             <Route path="pacientes">
               <Route index element={<ListarPacientes />} />
-              <Route path='list' element={<ListarPacientes />} />
-              
+              <Route path='list' element={<ListarPacientes />} />            
               <Route path='editar/:id' element={<EditarPaciente />} />
             </Route>
             <Route path="Turnos">
@@ -55,8 +51,6 @@ const Secretaria = () => {
             </Route>
             <Route path="Cobros" element={<Cobros />} /> 
             <Route path="Cobros/PaymentForm/:id" element={<PaymentForm />} />
-
-          
             <Route path="Login/Logout" element={<Logout />} />
             <Route path="*" element={<NotFound />} />
           </Route>
