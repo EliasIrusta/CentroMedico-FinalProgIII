@@ -39,7 +39,7 @@ export function Formulario({ setUser }) {
         }
 
         if (user.rol.name == 'medico') {
-            window.location.href = "/medico/Historial"
+            window.location.href = "/medico"
         }
 
     }

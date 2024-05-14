@@ -5,7 +5,7 @@ import LayoutMedico from './modules/LayoutMedico'
 import ListarUsuarios from './modules/Usuarios/ListarUsuarios'
 import EditarUsuario from './modules/Usuarios/EditarUsuario'
 import CreateUser from './components/CreateUser'
-import CreatePaciente from './components/CreatePaciente'
+
 import ListarPacientes from './modules/Pacientes/ListarPacientes'
 import EditarPaciente from './modules/Pacientes/EditarPaciente'
 import BuscarTurno from './modules/Secretaria/Turnos/Buscar'

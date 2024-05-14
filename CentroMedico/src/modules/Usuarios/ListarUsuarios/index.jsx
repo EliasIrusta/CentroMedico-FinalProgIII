@@ -36,9 +36,9 @@ function ListarPacientes() {
       key: 'nombre',
     },
     {
-      title: 'Dni',
-      dataIndex: 'dni',
-      key: 'dni',
+      title: 'Telefono',
+      dataIndex: 'phone',
+      key: 'phone',
     },
     {
       title: 'Acciones',
@@ -67,6 +67,7 @@ function ListarPacientes() {
             nombre: x.firstName,
             apellido: x.lastName,
             dni: x.dni,
+            phone: x.phone,
           
             id: x._id,
           }))}
