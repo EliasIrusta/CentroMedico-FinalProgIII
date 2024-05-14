@@ -45,7 +45,7 @@ const Secretaria = () => {
             <Route path="pacientes">
               <Route index element={<ListarPacientes />} />
               <Route path='list' element={<ListarPacientes />} />
-              <Route path='create' element={<CreatePaciente />} />
+              
               <Route path='editar/:id' element={<EditarPaciente />} />
             </Route>
             <Route path="Turnos">
