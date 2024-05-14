@@ -7,7 +7,7 @@ const statusRouter = require('./routes/status')
 const authRouter = require('./routes/auth')
 const userRouter = require('./routes/user')
 const pacientesRouter = require('./routes/user')
-const authentication = require('./middlewares/authentication')
+//const authentication = require('./middlewares/authentication')
 const authorization = require('./middlewares/authorization')
 const turnoRouter = require('./routes/turno'); // Código agregado
 const app = express()
@@ -24,6 +24,7 @@ app.get('/favicon.ico', (req, res) => res.status(204))
 
 app.use('/', statusRouter)
 app.use('/auth', authRouter)
+
 app.use('/users', userRouter) // quitamos el middleware para que no si fije si esta conectado  --> authentication
 app.use('/pacientes', pacientesRouter) // quitamos el middleware para que no si fije si esta conectado  --> authentication
 app.use('/turno',turnoRouter)

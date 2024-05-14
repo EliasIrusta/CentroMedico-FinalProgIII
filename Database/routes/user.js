@@ -11,6 +11,10 @@ router.get('/:id', getUserById)
 router.post('/', createUser)
 router.put('/:id', updateUser)
 router.delete('/:id', deleteUser)
+router.get('/patients', getPatients)
+
+
+
 
 async function getAllUsers(req, res, next) {
  // console.log('getAllUsers by user ', req.user._id)   //consulta que usuario esta haciendo la consulta
@@ -21,7 +25,20 @@ async function getAllUsers(req, res, next) {
     next(err)
   }
 }
-
+async function getPatients(Role, res, next) {
+  try {
+    // Obtener el ID del rol "paciente"
+    const role = await Role.findOne({ name: 'paciente' })
+    if (!role) {
+      return res.status(404).send('Role "paciente" not found')
+    }
+    // Buscar usuarios con el rol "paciente"
+    const patients = await User.find({ role: role._id, isActive: true }).populate('role')
+    res.send(patients)
+  } catch (err) {
+    next(err)
+  }
+}
 async function getUserById(req, res, next) {
   console.log('getUser with id: ', req.params.id)
 
@@ -72,7 +89,7 @@ async function createUser(req, res, next) {
 
   const user = req.body
 
-  console.log(user.rol[0])
+  console.log('esto busca', user.rol[0])
 
   try {
     const role = await Role.findOne({ name: user.rol[0] })
@@ -166,6 +183,11 @@ async function deleteUser(req, res, next) {
   } catch (err) {
     next(err)
   }
+
+
+
 }
+
+
 
 module.exports = router

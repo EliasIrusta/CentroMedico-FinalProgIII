@@ -23,14 +23,14 @@ function editarPaciente() {
     }, [])
     return (
         <>
-            <h1>Información del Usuario</h1>
+            <h1>Información del Paciente</h1>
             {isLoading ? (
                 <Spin tip="Cargando info del usuario..." size="large">
                     <div className="content" />
                 </Spin>
             ) : (
                 <div>
-                    <pre>{JSON.stringify(userInfo, null, 2)}</pre>
+                   {/* <pre>{JSON.stringify(userInfo, null, 2)}</pre> */}
                     <UpdateUser data={{userInfo}} />
                 </div>
             )}

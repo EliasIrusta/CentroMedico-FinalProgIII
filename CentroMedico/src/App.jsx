@@ -1,74 +1,134 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
 import Home from './modules/Home'
-//import Students from './modules/Students'
 import Layout from './modules/Layout'
-//import NotFound from './modules/NotFound'
-//import SWCharacters from './modules/SWCharacters'
-//import CharacterDetail from './modules/CharacterDetail'
-//import Contact from './modules/Contact'
-//import About from './modules/About'
+import LayoutMedico from './modules/LayoutMedico'
 import ListarUsuarios from './modules/Usuarios/ListarUsuarios'
 import EditarUsuario from './modules/Usuarios/EditarUsuario'
 import CreateUser from './components/CreateUser'
 import CreatePaciente from './components/CreatePaciente'
 import ListarPacientes from './modules/Pacientes/ListarPacientes'
-import editarPaciente from './modules/Pacientes/EditarPaciente'
-import BuscarTurno from './modules/Turnos/Buscar'
-import ModificarTurno from './modules/Turnos/Modificar'
-import Turno from './modules/Turnos'
+import EditarPaciente from './modules/Pacientes/EditarPaciente'
+import BuscarTurno from './modules/Secretaria/Turnos/Buscar'
+import ModificarTurno from './modules/Secretaria/Turnos/Modificar'
+import Turnos from './modules/Secretaria/Turnos'
+import { useState, useEffect } from 'react'
+import Login from './modules/Login'
+import Logout from './modules/Login/Logout'
+import NotFound from './modules/NotFound'
+import Historial from './modules/Medico/Historial'
+import Informe from './modules/Medico/Informe'
+import Agenda from './modules/Medico/Agenda'
+import Cobros from './modules/Secretaria/Cobros'
+import PaymentForm from './modules/Secretaria/Cobros/PaymentForm'
 
 
 
-import { useState } from 'react'
-import FormLogin from './modules/Login/Login'
-
-
-
-
-
-function App() {
-  const [user, setUser] = useState([])
+const Secretaria = () => {
 
   return (
     <div className="App">
-      {/* { !user.length > 0 ? <FormLogin setUser={setUser}/>
-    
-    :   */}
+
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
-            {/* <Route path="students" element={<Students />} />
-            <Route path="sw-characters">
-              <Route index element={<SWCharacters />} />
-              <Route path=":id" element={<CharacterDetail />} />
-            </Route>
-            <Route path="contact" element={<Contact />}>
-              <Route path=":type" element={<Contact />} />
-            </Route>
-            <Route path="about" element={<About />} />
-            <Route path="*" element={<NotFound />} /> */}
             <Route path="usuarios">
               <Route index element={<ListarUsuarios />} />
               <Route path='list' element={<ListarUsuarios />} />
               <Route path='create' element={<CreateUser />} />
               <Route path='editar/:id' element={<EditarUsuario />} />
             </Route>
+            <Route path="medicos">
+              <Route index element={<ListarUsuarios />} />
+
+            </Route>
             <Route path="pacientes">
               <Route index element={<ListarPacientes />} />
               <Route path='list' element={<ListarPacientes />} />
               <Route path='create' element={<CreatePaciente />} />
-              <Route path='editar/:id' element={<editarPaciente />} />
+              <Route path='editar/:id' element={<EditarPaciente />} />
             </Route>
             <Route path="Turnos">
-              <Route index element={<Turno />} />
+              <Route index element={<Turnos />} />
               <Route path="Buscar" element={<BuscarTurno />} />
               <Route path="Modificar" element={<ModificarTurno />} />
             </Route>
+            <Route path="Cobros" element={<Cobros />} /> 
+            <Route path="Cobros/PaymentForm/:id" element={<PaymentForm />} />
+
+          
+            <Route path="Login/Logout" element={<Logout />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>
-    
+
+    </div>
+  )
+
+}
+
+
+const Medico = () => {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+        <Route element={<LayoutMedico />}>
+          <Route path="Medico/Agenda/" element={<Agenda />} />
+          <Route path="Medico/Historial" element={<Historial />} />
+          <Route path="Medico/Informe/:id" element={<Informe />} />
+          <Route path="Login/Logout" element={<Logout />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
+function App() {
+  //const MiContexto = React.createContext(null)
+  const miRol = localStorage.getItem('rol')
+  const miToken = localStorage.getItem('miToken')
+  const miId = localStorage.getItem('miId')
+  const [user, setUser] = useState({
+    email: '',
+    password: '',
+    rol: miRol,
+    token: miToken,
+    _id: miId,
+  })
+
+
+  //const valorContexto = useContext(MiContexto);
+
+  useEffect(() => {
+    localStorage.setItem('miToken', user.token);
+    localStorage.setItem('rol', user.rol);
+    localStorage.setItem('miId', user._id);
+
+    // Redirigir después de establecer el estado del usuario
+    if (user.rol.name == 'admin') {
+      window.location.href = "/pacientes/list";
+    }
+
+    if (user.rol.name == 'medico') {
+      window.location.href = "/";
+      console.log('idUSRIO', user._id)
+    }
+  }, [user]);
+
+  return (
+    <div className="App">
+      {(user.rol === 'null' || user.rol === null) && (
+        <Login setUser={setUser} />
+      )}
+
+      {user.rol == 'admin' && Secretaria()}
+
+      {user.rol == 'medico' && <Medico miId={user._id} />}
+      {console.log('idUSUAR', user._id)}
+
     </div>
   )
 }

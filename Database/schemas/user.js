@@ -6,7 +6,7 @@ const Schema = mongoose.Schema
 const { ObjectId } = Schema.Types
 const emailValidator = validate({ validator: 'isEmail' })
 
-const governmentIdTypes = ['cuil', 'cuit', 'dni', 'lc', 'le', 'pas']
+
 
 const userSchema = new Schema({
   email: {
@@ -21,16 +21,13 @@ const userSchema = new Schema({
   role: { type: ObjectId, ref: 'Role', required: true },
   firstName: { type: String, required: true, lowercase: true, trim: true },
   lastName: { type: String, required: true, lowercase: true, trim: true },
+  especialidad:{ type: String, lowercase: true, trim: true },
   phone: { type: String, trim: true },
-  governmentId: {
-    type: { type: String, enum: governmentIdTypes },
-    number: { type: String, trim: true },
-  },
+  dni: { type: String, required: true },
   bornDate: { type: Date },
-  isActive: { type: Boolean, default: true },
+    isActive: { type: Boolean, default: true },
 })
 
-userSchema.index({ 'governmentId.type': 1, 'governmentId.number': 1 }, { unique: false})
 
 userSchema.method('checkPassword', async function checkPassword(potentialPassword) {
   if (!potentialPassword) {

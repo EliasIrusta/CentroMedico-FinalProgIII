@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import {
-    AutoComplete,
-    Button,
-    Cascader,
-    Checkbox,
-    Col,
-    Form,
-    Input,
-    InputNumber,
+import {AutoComplete,    Button,    Cascader,    Checkbox,    Col,    Form,    Input,    InputNumber,
     Row,
     Select,
+    message
 } from 'antd';
-import swService from '../services/swapi'
+//import swService from '../services/swapi'
+import userService from '../services/userApi';
+
+
+
+
 const { Option } = Select;
 const roles = [
     {
@@ -66,12 +64,12 @@ const UpdateUser = (data) => {
 
         const fetchData = async () => {
 
-            const response = await swService.updateUser(userData._id, values)
+            const response = await userService.updateUser(userData._id, values)
             console.log(response)
         }
         fetchData()
-
-        window.location.href = "/usuarios/list"
+        message.success('¡Usuario actualizado correctamente!');
+        window.location.href = "/"
     };
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
@@ -110,8 +108,8 @@ const UpdateUser = (data) => {
                 email: userData.email,
                 firstName: userData.firstName,
                 lastName: userData.lastName,
+                dni: userData.dni,
                 phone: userData.phone,
-
                 prefix: '+54',
             }}
             style={{
@@ -169,7 +167,21 @@ const UpdateUser = (data) => {
             </Form.Item>
 
         
-
+            <Form.Item
+                name="dni"
+                label="DNI"
+                rules={[
+                    {
+                        type: 'text'
+                    },
+                    {
+                        required: true,
+                        message: 'Please input your name',
+                    },
+                ]}
+            >
+                <Input />
+            </Form.Item>
             <Form.Item
                 name="phone"
                 label="Phone Number"

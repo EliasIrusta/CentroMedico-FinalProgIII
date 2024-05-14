@@ -11,12 +11,22 @@ import {
     Row,
     Select,
 } from 'antd';
-import swService from '../services/swapi'
+import swService from '../services/swapi';
+import pacienteService from '../services/pacientesApi';
+import userService from '../services/userApi';
 const { Option } = Select;
 const roles = [
-    
+
     {
         value: 'paciente',
+        label: 'Paciente',
+    },
+    {
+        value: 'medico',
+        label: 'Paciente',
+    },
+    {
+        value: 'admin',
         label: 'Paciente',
     },
 ];
@@ -58,14 +68,15 @@ const App = () => {
         console.log('Received values of form: ', values);
 
         const fetchData = async () => {
-            
-            const response = await swService.createUser(values)
+
+            const response = await userService.createUser(values)
             console.log(response)
         }
         fetchData()
 
-        window.location.href = "/usuarios/list"
+       // window.location.href = "/pacientes/list"
     };
+
     const prefixSelector = (
         <Form.Item name="prefix" noStyle>
             <Select
@@ -78,7 +89,7 @@ const App = () => {
             </Select>
         </Form.Item>
     );
-   
+
     const [autoCompleteResult, setAutoCompleteResult] = useState([]);
     const onWebsiteChange = (value) => {
         if (!value) {
@@ -91,6 +102,13 @@ const App = () => {
         label: website,
         value: website,
     }));
+
+
+
+    const handleRolChange = (value) => {
+        setRol(value);
+    };
+
     return (
         <Form
             {...formItemLayout}
@@ -105,6 +123,7 @@ const App = () => {
             }}
             scrollToFirstError
         >
+
             <Form.Item
                 name="email"
                 label="E-mail"
@@ -131,7 +150,7 @@ const App = () => {
                     },
                     {
                         required: true,
-                        message: 'Please input your name',
+                        message: 'Please input your first name',
                     },
                 ]}
             >
@@ -147,27 +166,46 @@ const App = () => {
                     },
                     {
                         required: true,
-                        message: 'Please input your name',
+                        message: 'Please input your last name',
                     },
                 ]}
             >
                 <Input />
+                </Form.Item>
+                
+                <Form.Item
+                    name={['type']}
+                    label="Tipo de Documento"
+                    rules={[
+                        {
+                            type: 'string',
+                            required: true,
+                            message: 'Por favor, selecciona el tipo de documento',
+                        },
+                    ]}
+                >
+                    <Select>
+                        <Select.Option value="cuil">CUIL</Select.Option>
+                        <Select.Option value="cuit">CUIT</Select.Option>
+                        <Select.Option value="dni">DNI</Select.Option>
+
+                    </Select>
+                </Form.Item>
+
+                <Form.Item
+                    name={['dni']}
+                    label="Número de Documento"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, ingresa el número de documento',
+                        },
+                    ]}
+                >
+                    <Input />
+            
             </Form.Item>
-            <Form.Item
-                name="governmentId"
-                label="DNI"
-                rules={[
-                    {
-                        type: 'text'
-                    },
-                    {
-                        required: true,
-                        message: 'Please input your id',
-                    },
-                ]}
-            >
-                <Input />
-            </Form.Item>
+
             <Form.Item
                 name="password"
                 label="Password"
@@ -213,7 +251,7 @@ const App = () => {
                     {
                         type: 'array',
                         required: true,
-                        message: 'Please select your habitual residence!',
+                        message: 'selecciona rol',
                     },
                 ]}
             >

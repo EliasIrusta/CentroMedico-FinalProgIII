@@ -24,7 +24,8 @@
     "mongodb": "^6.1.0",
     "mongoose": "^7.6.0",
     "mongoose-validator": "^2.1.0",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "react-credit-cards-2": "^1.0.2"
   },
   "devDependencies": {
     "eslint": "^8.51.0",

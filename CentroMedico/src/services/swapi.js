@@ -5,9 +5,9 @@ const swService = {}
 swService.getRoot = () => api.get('/')
 swService.getPeople = () => api.get(`/users`)
 swService.getPersonById = (id) => api.get(`/users/${id}`)
-swService.createUser = (data) => api.post(`/users/`, data)
-swService.deleteUser = (id) => api.delete(`/users/${id}`)
-swService.updateUser = (id, data) => api.put(`/users/${id}`, data)
+//swService.createUser = (data) => api.post(`/users/`, data)
+//swService.deleteUser = (id) => api.delete(`/users/${id}`)
+//swService.updateUser = (id, data) => api.put(`/users/${id}`, data)
 
 swService.login = (data) => api.post(`auth`, data)
 

@@ -1,6 +1,7 @@
 const express = require('express')
 //const bcrypt = require('bcrypt')
-
+const User = require('../schemas/user')
+const Role = require('../schemas/role')
 const Turno = require('../schemas/turno')
 //const Role = require('../schemas/role')
 const mongoose = require('mongoose')
@@ -9,9 +10,32 @@ const router = express.Router()
 
 router.post('/', createTurno)
 router.get('/', getAllTurnos)
+router.get('/:id', getTurnoById)
 router.post('/buscar', buscarTurnosPorFecha)
 router.put('/:id', editarTurno)
 router.delete('/:id', borrarTurno)
+
+async function getTurnoById(req, res, next) {
+  console.log('getTurno with id: ', req.params.id)
+
+  if (!req.params.id) {
+    res.status(500).send('The param id is not defined')
+  }
+
+  try {
+    const turno = await Turno.findById(req.params.id)
+    console.log('turno del back', turno);
+
+    if (!turno || turno.length == 0) {
+      res.status(404).send('turno not found')
+    }
+
+    res.send(turno)
+  } catch (err) {
+    next(err)
+  }
+}
+
 
 async function createTurno(req, res, next) {
   console.log('createTurno: ', req.body)
@@ -35,12 +59,24 @@ async function getAllTurnos(req, res) {
   console.log('getAllTurnos  ')
 
   try {
-    const turnos = await Turno.find({ estado: 'pendiente' })
+    const turnos = await Turno.find()
     res.send(turnos)
   } catch (err) {
     console.log(err)
   }
 }
+
+/* 
+async function getAllTurnos(req, res) {
+  console.log('getAllTurnos  ')
+
+  try {
+    const turnos = await Turno.find({ estado: 'pendiente' })
+    res.send(turnos)
+  } catch (err) {
+    console.log(err)
+  }
+} */
 
 async function buscarTurnosPorFecha(req, res, next) {
   try {
@@ -64,6 +100,8 @@ async function editarTurno(req, res, next) {
     const nuevoEstado = req.body.estado
     const nuevaFecha = req.body.fechaTurno
     const nuevaHora = req.body.horaTurno
+    const nuevoTratamiento = req.body.tratamiento
+    
 
     // Validar si el ID del turno es válido antes de realizar la actualización
     if (!mongoose.Types.ObjectId.isValid(turnoId)) {
@@ -73,8 +111,9 @@ async function editarTurno(req, res, next) {
     // Realizar la actualización del turno por su ID
     const turnoActualizado = await Turno.findByIdAndUpdate(
       turnoId,
-      { estado: nuevoEstado, fechaTurno: nuevaFecha, horaTurno: nuevaHora },
+      { estado: nuevoEstado, fechaTurno: nuevaFecha, horaTurno: nuevaHora , tratamiento: nuevoTratamiento},
       { new: true },
+      console.log('delservice',turnoId,nuevoEstado,nuevoTratamiento)
     )
 
     // Verificar si el turno se encontró y se actualizó correctamente
@@ -88,6 +127,11 @@ async function editarTurno(req, res, next) {
     next(err)
   }
 }
+
+
+
+
+
 
 async function borrarTurno(req, res, next) {
   try {

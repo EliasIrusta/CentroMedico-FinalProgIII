@@ -2,16 +2,11 @@ import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import {
-  QuestionCircleOutlined,
-  PhoneOutlined,
-  HomeOutlined,
-  TeamOutlined,
-  MailOutlined,
-  UserOutlined,
-  UserAddOutlined,
-  MedicineBoxOutlined,
-  ScheduleOutlined,
-  ScheduleTwoTone
+  
+  HistoryOutlined,
+  FileDoneOutlined ,
+  DollarOutlined,
+  CloseSquareOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu, theme } from 'antd'
 
@@ -27,27 +22,10 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem(<Link to="/"> Home </Link>, '1', <HomeOutlined />),
+  getItem(<Link to="Medico/Historial"> Historial </Link>, '1', <HistoryOutlined />),
+  getItem(<Link to="Medico/Agenda"> Agenda </Link>, '2', <FileDoneOutlined />),
+  getItem(<Link to="Login/Logout"> Logout </Link>, '4', <CloseSquareOutlined />),
 
-  getItem(<Link to="/usuarios"> Medicos </Link>, '2', <UserOutlined />, [
-    getItem(<Link to="/usuarios/create"> Crear Medico</Link>, '3', <UserAddOutlined />),
-    getItem(<Link to="/usuarios/list"> Listar Medicos</Link>, '43', <UserOutlined />),
-    ,
-
-  ]),
-  getItem(<Link to="/pacientes"> Pacientes </Link>, '5', <MedicineBoxOutlined />, [
-    getItem(<Link to="/pacientes/create"> Crear Paciente</Link>, '6', <UserAddOutlined />),
-    getItem(<Link to="/pacientes/list"> Listar Pacientes</Link>, '7', <UserOutlined />),
-    ,
-
-  ]),
-
-  getItem(<Link to="/turnos"> Turnos </Link>, '8', <ScheduleOutlined />, [
-
-    getItem(<Link to="/turnos/ModificarTurno"> Modificar Turno</Link>, '10', <ScheduleTwoTone />),
-    ,
-
-  ]),
 ]
 
 const App = () => {
@@ -84,7 +62,7 @@ const App = () => {
             alignItems: 'center',
           }}
         >
-          <h1>SECRETARÍA</h1>
+          <h1>Medico</h1>
         </Header>
         <Content
           style={{

@@ -1,4 +1,4 @@
-import userService from '../../services/userApi'
+import userService from '../services/userApi'
 
 
 
@@ -13,6 +13,7 @@ export async function validarUsuario({ user }) {
 
       user.rol = response.user.role;
       user.token = response.token;
+      user._id = response.user._id;
       resolve(user);
     } catch (error) {
       console.error('Error al obtener la respuesta:', error);

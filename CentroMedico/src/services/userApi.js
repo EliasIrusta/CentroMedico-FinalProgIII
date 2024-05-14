@@ -7,8 +7,11 @@ userService.getPeople = () => api.get(`/people`)
 userService.getPersonById = (id) => api.get(`/people/${id}`)
 userService.authUsuario = (usr) => api.post(`/auth/`,usr)
 
+userService.getPatients = () => api.get(`/users/patients`)
 
-userService.getAllPeople = () => api.get(`/pacientes`)
+userService.createUser = (data) => api.post(`/users/`, data)
+userService.deleteUser = (id) => api.delete(`/users/${id}`)
+userService.updateUser = (id, data) => api.put(`/users/${id}`, data)
 
 
 
