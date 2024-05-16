@@ -19,6 +19,7 @@ import Informe from './modules/Medico/Informe'
 import Agenda from './modules/Medico/Agenda'
 import Cobros from './modules/Secretaria/Cobros'
 import PaymentForm from './modules/Secretaria/Cobros/PaymentForm'
+import HistorialPagos from './modules/Secretaria/Cobros/HistorialPagos'
 
 const Secretaria = () => {
   return (
@@ -46,8 +47,14 @@ const Secretaria = () => {
               <Route path="Buscar" element={<BuscarTurno />} />
               <Route path="Modificar" element={<ModificarTurno />} />
             </Route>
-            <Route path="Cobros" element={<Cobros />} />
+            <Route path="Cobros" >
+              <Route index element={<Cobros />} />
+              <Route path="HistorialPagos" element={<HistorialPagos />} />  
+            </Route>
+
             <Route path="Cobros/PaymentForm/:id" element={<PaymentForm />} />
+
+
             <Route path="Login/Logout" element={<Logout />} />
             <Route path="*" element={<NotFound />} />
           </Route>

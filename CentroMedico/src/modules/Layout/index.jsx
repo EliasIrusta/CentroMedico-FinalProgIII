@@ -9,6 +9,7 @@ import {
   ScheduleTwoTone,
   CloseSquareOutlined,
   DollarOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu, theme } from 'antd'
 
@@ -63,7 +64,12 @@ const items = [
     ),
     ,
   ]),
-  getItem(<Link to="/Cobros"> Cobros </Link>, '15', <DollarOutlined />),
+  getItem(<Link to="/Cobros"> Cobros </Link>, '15', <DollarOutlined />, [
+    getItem(<Link to="Cobros/HistorialPagos">historial Pagos</Link>,
+      '16',
+      <HistoryOutlined />
+    ),
+  ]),
 
   getItem(
     <Link to="/Login/Logout"> Logout </Link>,

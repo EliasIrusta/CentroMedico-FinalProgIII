@@ -20,7 +20,7 @@ app.set('port', port)
 const server = http.createServer(app)
 
 const db_url =  'mongodb://127.0.0.1:27017/' //process.env.MONGO_URL ||
-const db_name =  'consultorio2'//process.env.MONGO_DB ||
+const db_name =  'consultorio'//process.env.MONGO_DB ||
 
 // MongoDB database initialization
 initDatabase()
@@ -28,7 +28,7 @@ initDatabase()
   .catch((err) => console.log(err))
 
 async function initDatabase() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/consultorio2', { useNewUrlParser: true, useUnifiedTopology: true });
+  await mongoose.connect('mongodb://127.0.0.1:27017/consultorio', { useNewUrlParser: true, useUnifiedTopology: true });
 }
 
 // Listen on provided port, on all network interfaces.

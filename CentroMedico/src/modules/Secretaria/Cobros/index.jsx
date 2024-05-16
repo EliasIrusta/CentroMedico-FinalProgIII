@@ -1,8 +1,11 @@
-import { Table, Button, DatePicker, Modal, message } from 'antd'
-import { useState, useEffect } from 'react'
-import turnoService from '../../../services/turnoApi'
-import pacienteService from '../../../services/pacientesApi'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Table, Button, DatePicker, Modal, message, Select } from 'antd';
+import turnoService from '../../../services/turnoApi';
+import pacienteService from '../../../services/pacientesApi';
+import pagosService from '../../../services/pagosApi';
+import { Link } from 'react-router-dom';
+
+const { Option } = Select;
 
 const columns = (handleIniciarCobro) => [
   {
@@ -36,53 +39,54 @@ const columns = (handleIniciarCobro) => [
       </span>
     ),
   },
-]
+];
 
 function Cobros() {
-  const [turnos, setTurnos] = useState([])
-  const [refresh, setRefresh] = useState(false)
-  const [visible, setVisible] = useState(false)
-  const [selectedTurno, setSelectedTurno] = useState(null)
+  const [turnos, setTurnos] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [selectedTurno, setSelectedTurno] = useState(null);
+  const [categoriaPago, setCategoriaPago] = useState(null);
 
   useEffect(() => {
-    onClick()
-    setRefresh(false)
-    const tokenUsuario = localStorage.getItem('miToken')
-    const idUsuario = localStorage.getItem('miId')
-  }, [refresh])
+    onClick();
+    setRefresh(false);
+  }, [refresh]);
 
-  const onClick = () => {
-    const fetchData = async () => {
-      const response = await turnoService.getAllTurnos()
-      setTurnos(response)
+  const onClick = async () => {
+    try {
+      const response = await turnoService.getAllTurnos();
+      setTurnos(response);
+    } catch (error) {
+      console.error('Error al obtener los turnos:', error);
     }
-    fetchData()
-  }
+  };
 
-  const handleFechaChange = (date, dateString) => {
-    const fetchData = async () => {
-      const fecha = { fechaTurno: dateString }
-      const response = await turnoService.buscarTurnoPorFecha(fecha)
-      setTurnos(response)
+  const handleFechaChange = async (date, dateString) => {
+    try {
+      const fecha = { fechaTurno: dateString };
+      const response = await turnoService.buscarTurnoPorFecha(fecha);
+      setTurnos(response);
+    } catch (error) {
+      console.error('Error al buscar los turnos por fecha:', error);
     }
-    fetchData()
-  }
+  };
 
   useEffect(() => {
-    traerTurnos()
-    setRefresh(false)
-  }, [refresh])
+    traerTurnos();
+    setRefresh(false);
+  }, [refresh]);
 
   const traerTurnos = async () => {
     try {
-      const response = await turnoService.getAllTurnos()
+      const response = await turnoService.getAllTurnos();
       const turnosConMedico = await Promise.all(
         response.map(async (turno) => {
           if (turno.medico_id) {
-            const pacientes = await pacienteService.getAllPacientes()
+            const pacientes = await pacienteService.getAllPacientes();
             const medico = pacientes.find(
-              (paciente) => paciente._id === turno.medico_id,
-            )
+              (paciente) => paciente._id === turno.medico_id
+            );
             if (medico) {
               return {
                 ...turno,
@@ -91,50 +95,110 @@ function Cobros() {
                   apellido: medico.lastName,
                   especialidad: medico.especialidad,
                 },
-              }
+              };
             }
           }
-          return turno
-        }),
-      )
-      setTurnos(turnosConMedico.filter((turno) => turno))
+          return turno;
+        })
+      );
+      setTurnos(turnosConMedico.filter((turno) => turno));
     } catch (error) {
-      console.error('Error al obtener los turnos:', error)
+      console.error('Error al obtener los turnos:', error);
     }
-  }
+  };
 
   const handleIniciarCobro = (record) => {
-    setSelectedTurno(record)
-    setVisible(true)
-  }
+    setSelectedTurno(record);
+    setVisible(true);
+  };
 
   const handleCancel = () => {
-    setVisible(false)
-    setSelectedTurno(null)
-  }
+    setVisible(false);
+    setSelectedTurno(null);
+    setCategoriaPago(null);
+  };
 
-  const handlePagoEfectivo = async () => {
+  const handlePago = async (metodo) => {
     try {
-      const data = { estado: 'pagado' }
-      await turnoService.editarTurno(selectedTurno._id, data)
-      message.success('¡Pago realizado con éxito!')
-      setVisible(false)
-      setRefresh(true)
-    } catch (error) {
-      console.error('Error al realizar el pago:', error)
-      message.error('¡Error al realizar el pago!')
-    }
-  }
+      if (!categoriaPago) {
+        message.error('Debe seleccionar una categoría de pago primero!');
+        return;
+      }
 
+      let monto = 0;
+      switch (categoriaPago) {
+        case 'primera-consulta':
+          monto = 5000;
+          break;
+        case 'consulta':
+          monto = 3500;
+          break;
+        case 'control':
+          monto = 2500;
+          break;
+        default:
+          monto = 0;
+      }
+
+      const pagoData = {
+        turno_id: selectedTurno._id,
+        categoria: categoriaPago,
+        monto: monto.toString(),
+        metodoPago: metodo,
+      };
+      console.log(metodo)
+      const response = await pagosService.createPago(pagoData);
+      await turnoService.editarTurno(selectedTurno._id, { estado: 'pagado' });
+
+      message.success('¡Pago realizado con éxito!');
+      setVisible(false);
+      setRefresh(true);
+    } catch (error) {
+      console.error('Error al realizar el pago:', error);
+      message.error('¡Error al realizar el pago!');
+    }
+  };
+
+  const handlePagoTarjeta = async () => {
+    try {
+      if (!categoriaPago) {
+        message.error('Debe seleccionar una categoría de pago primero!');
+        return;
+      }
+
+      let monto = 0;
+      switch (categoriaPago) {
+        case 'primera-consulta':
+          monto = 5000;
+          break;
+        case 'consulta':
+          monto = 3500;
+          break;
+        case 'control':
+          monto = 2500;
+          break;
+        default:
+          monto = 0;
+      }
+
+      const pagoData = {
+        turno_id: selectedTurno._id,
+        categoria: categoriaPago,
+        monto: monto.toString(),
+        metodoPago: 'tarjeta',
+      };
+
+      await pagosService.createPago(pagoData);
+
+      message.success('¡Pago inicializado con tarjeta!');
+    } catch (error) {
+      console.error('Error al inicializar el pago con tarjeta:', error);
+      message.error('¡Error al inicializar el pago con tarjeta!');
+    }
+  };
+  
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          textTransform: 'capitalize',
-        }}
-      ></div>
       <h2>Cobros</h2>
       <DatePicker onChange={handleFechaChange} style={{ marginBottom: 20 }} />
       <Table
@@ -150,10 +214,15 @@ function Cobros() {
         visible={visible}
         onCancel={handleCancel}
         footer={[
-          <Button key="efectivo" type="primary" onClick={handlePagoEfectivo}>
+          <Button key="efectivo" type="primary" onClick={() => handlePago('efectivo')}>
             Efectivo
           </Button>,
-          <Link to={`PaymentForm/${selectedTurno?._id}`} key="tarjeta">
+          
+          <Link
+            to={categoriaPago ? `PaymentForm/${selectedTurno?._id}` : '#'}
+            key="tarjeta"
+            onClick={handlePagoTarjeta}
+          >
             <Button type="primary">Tarjeta de Crédito</Button>
           </Link>,
           <Button key="cancel" onClick={handleCancel}>
@@ -161,10 +230,19 @@ function Cobros() {
           </Button>,
         ]}
       >
-        <p>Seleccione el método de pago:</p>
+        <p>Seleccione la categoría de pago:</p>
+        <Select
+          defaultValue="Seleccione una categoría"
+          style={{ width: '100%', marginBottom: 20 }}
+          onChange={(value) => setCategoriaPago(value)}
+        >
+          <Option value="primera-consulta">Primera Consulta</Option>
+          <Option value="consulta">Consulta</Option>
+          <Option value="control">Control</Option>
+        </Select>
       </Modal>
     </div>
-  )
+  );
 }
 
-export default Cobros
+export default Cobros;
