@@ -15,7 +15,9 @@ const columns = [
     key: 'medico',
     render: (_, record) => (
       <span>
-        {record.medico ? `${record.medico.nombre} ${record.medico.apellido}` : 'Sin médico asignado'}
+        {record.medico
+          ? `${record.medico.nombre} ${record.medico.apellido}`
+          : 'Sin médico asignado'}
       </span>
     ),
   },
@@ -25,7 +27,9 @@ const columns = [
     key: 'especialidad',
     render: (_, record) => (
       <span>
-        {record.medico ? `${record.medico.especialidad}` : 'Sin médico asignado'}
+        {record.medico
+          ? `${record.medico.especialidad}`
+          : 'Sin médico asignado'}
       </span>
     ),
   },
@@ -40,7 +44,6 @@ const columns = [
     dataIndex: 'horaTurno',
     key: 'horaTurno',
   },
-
 
   {
     title: 'Estado',
@@ -58,26 +61,23 @@ function BuscarTurno() {
     setRefresh(false)
     const tokenUsuario = localStorage.getItem('miToken')
     console.log(tokenUsuario)
-    //console.log(turnos)
   }, [refresh])
 
   const onClick = () => {
     const fetchData = async () => {
       const response = await turnoService.getAllTurnos()
-      console.log(response)
       setTurnos(response)
     }
     fetchData()
   }
 
   const handleFechaChange = (date, dateString) => {
-    //setFechaSeleccionada(dateString);
     console.log(dateString)
 
     const fetchData = async () => {
       const fecha = { fechaTurno: dateString }
       const response = await turnoService.buscarTurnoPorFecha(fecha)
-      //console.log(response)
+
       setTurnos(response)
     }
     fetchData()
@@ -86,51 +86,62 @@ function BuscarTurno() {
   useEffect(() => {
     traerTurnos()
     setRefresh(false)
-    //console.log(turnos)
   }, [refresh])
   const traerTurnos = async () => {
     try {
-      const response = await turnoService.getAllTurnos();
-      const turnosConMedico = await Promise.all(response.map(async (turno) => {
-        if (turno.medico_id) {
-          // Obtener todos los pacientes de la base de datos
-          const pacientes = await pacienteService.getAllPacientes();
-          // Buscar el paciente cuyo ID coincida con el medico_id del turno actual
-          const medico = pacientes.find(paciente => paciente._id === turno.medico_id);
-          // Si se encuentra el médico, agregar su nombre y apellido al turno
-          if (medico) {
-            return { ...turno, medico: { nombre: medico.firstName, apellido: medico.lastName, especialidad: medico.especialidad } };
+      const response = await turnoService.getAllTurnos()
+      const turnosConMedico = await Promise.all(
+        response.map(async (turno) => {
+          if (turno.medico_id) {
+            const pacientes = await pacienteService.getAllPacientes()
+            const medico = pacientes.find(
+              (paciente) => paciente._id === turno.medico_id,
+            )
+            if (medico) {
+              return {
+                ...turno,
+                medico: {
+                  nombre: medico.firstName,
+                  apellido: medico.lastName,
+                  especialidad: medico.especialidad,
+                },
+              }
+            }
           }
-        }
-        return turno;
-      }));
-      setTurnos(turnosConMedico.filter(turno => turno)); // Eliminar turnos que no tienen médico
+          return turno
+        }),
+      )
+      setTurnos(turnosConMedico.filter((turno) => turno))
     } catch (error) {
-      console.error("Error al obtener los turnos:", error);
+      console.error('Error al obtener los turnos:', error)
     }
-  };
+  }
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', textTransform: 'capitalize' }}>
-      <h2 >Filtro Fecha: </h2>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          textTransform: 'capitalize',
+        }}
+      >
+        <h2>Filtro Fecha: </h2>
         <DatePicker format="DD-MM-YYYY" onChange={handleFechaChange} />
         <Button type="primary" onClick={() => onClick()}>
           Traer todos los turnos
         </Button>
+      </div>
 
-      </div>
-      
-        <h2 >TURNOS</h2>
-        <Table
-          dataSource={turnos}
-          columns={columns}
-          rowKey="_id"
-          pagination={{ pageSize: 10 }}
-          bordered
-          style={{ textTransform: 'capitalize' }}
-        />
-      </div>
-    
+      <h2>TURNOS</h2>
+      <Table
+        dataSource={turnos}
+        columns={columns}
+        rowKey="_id"
+        pagination={{ pageSize: 10 }}
+        bordered
+        style={{ textTransform: 'capitalize' }}
+      />
+    </div>
   )
 }
 

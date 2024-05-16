@@ -1,6 +1,6 @@
 import { Button, Modal } from 'antd'
 import { Link } from 'react-router-dom'
-import userService from '../services/userApi';
+import userService from '../services/userApi'
 
 function Character({ data, onDelete }) {
   const handleDelete = () => {
@@ -12,26 +12,24 @@ function Character({ data, onDelete }) {
       cancelText: 'Cancelar',
       onOk() {
         userService.deleteUser(data.id).then(() => {
-          // Eliminación exitosa, ejecutar la función onDelete
-          onDelete(data.id);
-        });
+          onDelete(data.id)
+        })
       },
-    });
-  };
+    })
+  }
 
   return (
     <tr>
-      
       <td>
         <Link to={`/pacientes/editar/${data.id}`}>
-          <Button>Editar</Button>
+          <Button>Editar Datos</Button>
         </Link>
-        <Button onClick={handleDelete} type="danger">
-          Borrar
+        <Button danger onClick={handleDelete}>
+          Borrar Paciente
         </Button>
       </td>
     </tr>
-  );
+  )
 }
 
-export default Character;
+export default Character

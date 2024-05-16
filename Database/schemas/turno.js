@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
-const { ObjectId } = require('mongodb');
+const { ObjectId } = require('mongodb')
 
 const turnoSchema = new mongoose.Schema({
-    fechaTurno: {
+  fechaTurno: {
     type: String,
     required: true,
   },
@@ -42,6 +42,6 @@ const turnoSchema = new mongoose.Schema({
   },
 })
 
-const Turno = mongoose.model('Turnos', turnoSchema);
+const Turno = mongoose.model('Turnos', turnoSchema)
 
-module.exports = Turno;
+module.exports = Turno

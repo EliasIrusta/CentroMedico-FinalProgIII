@@ -9,7 +9,7 @@ const userRouter = require('./routes/user')
 const pacientesRouter = require('./routes/user')
 //const authentication = require('./middlewares/authentication')
 const authorization = require('./middlewares/authorization')
-const turnoRouter = require('./routes/turno'); // Código agregado
+const turnoRouter = require('./routes/turno') // Código agregado
 const app = express()
 
 app.use(logger('dev'))
@@ -19,15 +19,14 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(authorization)
 
-// This is to aviod error
+
 app.get('/favicon.ico', (req, res) => res.status(204))
 
 app.use('/', statusRouter)
 app.use('/auth', authRouter)
 
-app.use('/users', userRouter) // quitamos el middleware para que no si fije si esta conectado  --> authentication
-app.use('/pacientes', pacientesRouter) // quitamos el middleware para que no si fije si esta conectado  --> authentication
-app.use('/turno',turnoRouter)
-
+app.use('/users', userRouter) 
+app.use('/pacientes', pacientesRouter)
+app.use('/turno', turnoRouter)
 
 module.exports = app

@@ -1,76 +1,101 @@
 import './Formulario.css'
 import { useState } from 'react'
 import { validarUsuario } from './validacionUsuarios'
-import { Spin } from 'antd'
+import { Spin, Form, Input, Button, message } from 'antd'
 
 export function Formulario({ setUser }) {
-
-    const [nombre, setNombre] = useState('')
-    const [contrasenia, setContrasenia] = useState('')
-    const [error, setError] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const [error401, setError401] = useState(false);
+    const [error401, setError401] = useState(false)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async (values) => {
+        const { nombre, contrasenia } = values
 
-        if (nombre === '' || contrasenia === '') {
-            setError(true)
-            return
-        }
-
-        setError(false)
         const user = {
             email: nombre,
             password: contrasenia,
             rol: '',
             token: '',
         }
+
         setIsLoading(true)
 
-        await validarUsuario({ user })
+        try {
+            await validarUsuario({ user })
 
-        setIsLoading(false)
+            setUser(user)
 
-        setUser(user)
-
-        if (user.rol.name == 'admin') {
-            window.location.href = "/pacientes"
+            if (user.rol.name === 'admin') {
+                window.location.href = '/pacientes'
+            } else if (user.rol.name === 'medico') {
+                window.location.href = '/medico'
+            }
+        } catch (error) {
+            setError401(true)
+            message.error('Error de autenticación')
+        } finally {
+            setIsLoading(false)
         }
+    }
 
-        if (user.rol.name == 'medico') {
-            window.location.href = "/medico"
-        }
-
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo)
     }
 
     return (
-        <section>
-            <h1 className="tituloLogin">Login</h1>
-            <Spin
-                spinning={isLoading}
-                size="large"
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            />
+        <section className="section-background">
+            <div className="form-container">
+                <h1 className="titulo">Bienvenido al Centro Médico</h1>
+                <h2 className="tituloLogin">Iniciar Sesión:</h2>
+                <Spin
+                    spinning={isLoading}
+                    size="large"
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                />
 
-            <form className="formulario" onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                />
-                <input
-                    type="password"
-                    value={contrasenia}
-                    onChange={(e) => setContrasenia(e.target.value)}
-                />
-                <button>Iniciar sesión</button>
-            </form>
-            {error && <p className="msg">Todos los campos son obligatorios</p>}
+                <Form
+                    name="basic"
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 16 }}
+                    style={{ maxWidth: 600 }}
+                    onFinish={handleSubmit}
+                    onFinishFailed={onFinishFailed}
+                    autoComplete="off"
+                >
+                    <Form.Item
+                        label="E-mail"
+                        name="nombre"
+                        rules={[
+                            { required: true, message: 'Por favor ingrese su nombre!' },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Contraseña"
+                        name="contrasenia"
+                        rules={[
+                            { required: true, message: 'Por favor ingrese su contraseña!' },
+                        ]}
+                    >
+                        <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                        <Button type="primary" htmlType="submit">
+                            Iniciar sesión
+                        </Button>
+                    </Form.Item>
+                </Form>
+
+                {error401 && <p className="msg">Error de autenticación</p>}
+            </div>
         </section>
     )
 }
+
+export default Formulario

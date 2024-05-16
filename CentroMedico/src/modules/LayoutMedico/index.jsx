@@ -1,11 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import {
-  
   HistoryOutlined,
-  FileDoneOutlined ,
-  DollarOutlined,
+  FileDoneOutlined,
   CloseSquareOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu, theme } from 'antd'
@@ -22,10 +20,17 @@ function getItem(label, key, icon, children) {
 }
 
 const items = [
-  getItem(<Link to="Medico/Historial"> Historial </Link>, '1', <HistoryOutlined />),
+  getItem(
+    <Link to="Medico/Historial"> Historial </Link>,
+    '1',
+    <HistoryOutlined />,
+  ),
   getItem(<Link to="Medico/Agenda"> Agenda </Link>, '2', <FileDoneOutlined />),
-  getItem(<Link to="Login/Logout"> Logout </Link>, '4', <CloseSquareOutlined />),
-
+  getItem(
+    <Link to="Login/Logout"> Logout </Link>,
+    '4',
+    <CloseSquareOutlined />,
+  ),
 ]
 
 const App = () => {
@@ -33,6 +38,7 @@ const App = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken()
+
   return (
     <Layout
       style={{
@@ -52,11 +58,11 @@ const App = () => {
           items={items}
         ></Menu>
       </Sider>
-      <Layout style={{ width: '100%' }}>
+      <Layout style={{ width: '100%' }} className="section-background">
         <Header
           style={{
             padding: 0,
-            background: colorBgContainer,
+            background: 'var(--color-bg-container)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -72,7 +78,8 @@ const App = () => {
           <div
             style={{
               height: '100%',
-              background: colorBgContainer,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
@@ -85,9 +92,10 @@ const App = () => {
         <Footer
           style={{
             textAlign: 'center',
+            background: 'var(--color-bg-container)',
           }}
         >
-          Ant Design ©2023 Created by Ant UED
+          Centro Médico - Final de Programación III - 2024
         </Footer>
       </Layout>
     </Layout>

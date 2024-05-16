@@ -1,21 +1,28 @@
-
-
-
-.tituloLogin{
-    font-size: 100px;
-    text-align: center;
+.section-background {
+  min-height: 100vh;
+  background-image: url('../assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.formulario{
-    
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
+.form-container {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Añadido para centrar el texto */
 }
 
-.msg{
-    text-align: center;
-    font-size: 20px;
+.titulo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.tituloLogin {
+  font-size: 20px;
+  margin-bottom: 20px;
 }

@@ -11,6 +11,9 @@
     "migrate-dev": "set NODE_ENV=production&& migrate-mongo"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",

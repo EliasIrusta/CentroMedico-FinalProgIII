@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Router } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Router } from 'react-router-dom'
 import Home from './modules/Home'
 import Layout from './modules/Layout'
 import LayoutMedico from './modules/LayoutMedico'
@@ -20,9 +20,7 @@ import Agenda from './modules/Medico/Agenda'
 import Cobros from './modules/Secretaria/Cobros'
 import PaymentForm from './modules/Secretaria/Cobros/PaymentForm'
 
-
 const Secretaria = () => {
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -31,44 +29,40 @@ const Secretaria = () => {
             <Route path="/" element={<Home />} />
             <Route path="usuarios">
               <Route index element={<ListarUsuarios />} />
-              <Route path='list' element={<ListarUsuarios />} />
-              <Route path='create' element={<CreateUser />} />
-              <Route path='editar/:id' element={<EditarUsuario />} />
+              <Route path="list" element={<ListarUsuarios />} />
+              <Route path="create" element={<CreateUser />} />
+              <Route path="editar/:id" element={<EditarUsuario />} />
             </Route>
             <Route path="medicos">
               <Route index element={<ListarUsuarios />} />
-
             </Route>
             <Route path="pacientes">
               <Route index element={<ListarPacientes />} />
-              <Route path='list' element={<ListarPacientes />} />            
-              <Route path='editar/:id' element={<EditarPaciente />} />
+              <Route path="list" element={<ListarPacientes />} />
+              <Route path="editar/:id" element={<EditarPaciente />} />
             </Route>
             <Route path="Turnos">
               <Route index element={<Turnos />} />
               <Route path="Buscar" element={<BuscarTurno />} />
               <Route path="Modificar" element={<ModificarTurno />} />
             </Route>
-            <Route path="Cobros" element={<Cobros />} /> 
+            <Route path="Cobros" element={<Cobros />} />
             <Route path="Cobros/PaymentForm/:id" element={<PaymentForm />} />
             <Route path="Login/Logout" element={<Logout />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>
-
     </div>
   )
-
 }
-
 
 const Medico = () => {
   return (
     <BrowserRouter>
-
       <Routes>
         <Route element={<LayoutMedico />}>
+          <Route path="/" element={<Home />} />
           <Route path="Medico/Agenda/" element={<Agenda />} />
           <Route path="Medico/Historial" element={<Historial />} />
           <Route path="Medico/Informe/:id" element={<Informe />} />
@@ -81,7 +75,6 @@ const Medico = () => {
 }
 
 function App() {
-  //const MiContexto = React.createContext(null)
   const miRol = localStorage.getItem('rol')
   const miToken = localStorage.getItem('miToken')
   const miId = localStorage.getItem('miId')
@@ -93,24 +86,19 @@ function App() {
     _id: miId,
   })
 
-
-  //const valorContexto = useContext(MiContexto);
-
   useEffect(() => {
-    localStorage.setItem('miToken', user.token);
-    localStorage.setItem('rol', user.rol);
-    localStorage.setItem('miId', user._id);
+    localStorage.setItem('miToken', user.token)
+    localStorage.setItem('rol', user.rol)
+    localStorage.setItem('miId', user._id)
 
-    // Redirigir después de establecer el estado del usuario
     if (user.rol.name == 'admin') {
-      window.location.href = "/pacientes/list";
+      window.location.href = '/pacientes/list'
     }
 
     if (user.rol.name == 'medico') {
-      window.location.href = "/";
-      console.log('idUSRIO', user._id)
+      window.location.href = '/Medico/Agenda'
     }
-  }, [user]);
+  }, [user])
 
   return (
     <div className="App">
@@ -121,11 +109,8 @@ function App() {
       {user.rol == 'admin' && Secretaria()}
 
       {user.rol == 'medico' && <Medico miId={user._id} />}
-      {console.log('idUSUAR', user._id)}
-
     </div>
   )
 }
 
 export default App
-

@@ -21,7 +21,8 @@ const initialRoles = [
     name: 'medico',
     createdAt: new Date(),
     updatedAt: new Date(),
-  }, {
+  },
+  {
     _id: new ObjectId('000000000000000000000003'),
     name: 'paciente',
     createdAt: new Date(),

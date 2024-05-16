@@ -13,11 +13,7 @@ router.put('/:id', updateUser)
 router.delete('/:id', deleteUser)
 router.get('/patients', getPatients)
 
-
-
-
 async function getAllUsers(req, res, next) {
- // console.log('getAllUsers by user ', req.user._id)   //consulta que usuario esta haciendo la consulta
   try {
     const users = await User.find({ isActive: true }).populate('role')
     res.send(users)
@@ -27,82 +23,46 @@ async function getAllUsers(req, res, next) {
 }
 async function getPatients(Role, res, next) {
   try {
-    // Obtener el ID del rol "paciente"
     const role = await Role.findOne({ name: 'paciente' })
     if (!role) {
       return res.status(404).send('Role "paciente" not found')
     }
-    // Buscar usuarios con el rol "paciente"
     const patients = await User.find({ role: role._id, isActive: true }).populate('role')
     res.send(patients)
   } catch (err) {
     next(err)
   }
 }
+
 async function getUserById(req, res, next) {
   console.log('getUser with id: ', req.params.id)
-
   if (!req.params.id) {
     res.status(500).send('The param id is not defined')
   }
-
   try {
     const user = await User.findById(req.params.id).populate('role')
-
     if (!user || user.length == 0) {
       res.status(404).send('User not found')
     }
-
     res.send(user)
   } catch (err) {
     next(err)
   }
 }
 
-// Por Postman
-// {
-//   "_id": "000000000000000000000000",
-//   "email": "admin@baseapinode.com",
-//   "password": "Password1",
-//   "firstName": "Admin",
-//   "lastName": "BaseApiNode",
-//   "role": "admin",
-//   "isActive": true
-// }
-// {
-//   "_id": "000000000000000000000001",
-//   "email": "client@baseapinode.com",
-//   "password": "Password1",
-//   "firstName": "Client",
-//   "lastName": "BaseApiNode",
-//   "role": "client",
-//     "governmentId": {
-//     "type": "dni",
-//     "number": "22222222"
-//   },
-//   "isActive": true
-// }
-
 async function createUser(req, res, next) {
   console.log('createUser: ', req.body)
-  
-
   const user = req.body
-
   console.log('esto busca', user.rol[0])
-
   try {
     const role = await Role.findOne({ name: user.rol[0] })
     if (!role) {
       res.status(404).send('Role not found')
     } else {
-      console.log(role);
+      console.log(role)
     }
-
     const passEncrypted = await bcrypt.hash(user.password, 10)
-
     const userCreated = await User.create({ ...user, password: passEncrypted, role: role._id })
-
     res.send(userCreated)
   } catch (err) {
     next(err)
@@ -115,49 +75,29 @@ async function updateUser(req, res, next) {
   if (!req.params.id) {
     return res.status(404).send('Parameter id not found')
   }
-
-
-
-  // The email can't be updated
   delete req.body.email
-
   try {
     const userToUpdate = await User.findById(req.params.id)
-
     if (!userToUpdate) {
       req.logger.error('User not found')
       return res.status(404).send('User not found')
     }
-
     if (req.body.role) {
       const newRole = await Role.findById(req.body.role)
-
       if (!newRole) {
         req.logger.verbose('New role not found. Sending 400 to client')
         return res.status(400).end()
       }
       req.body.role = newRole._id
     }
-
     if (req.body.password) {
       const passEncrypted = await bcrypt.hash(req.body.password, 10)
       req.body.password = passEncrypted
     }
 
-    // This will return the previous status
     await userToUpdate.updateOne(req.body)
     res.send(userToUpdate)
-
-    // This return the current status
-    // userToUpdate.password = req.body.password
-    // userToUpdate.role = req.body.role
-    // userToUpdate.firstName = req.body.firstName
-    // userToUpdate.lastName = req.body.lastName
-    // userToUpdate.phone = req.body.phone
-    // userToUpdate.bornDate = req.body.bornDate
-    // userToUpdate.isActive = req.body.isActive
-    // await userToUpdate.save()
-    // res.send(userToUpdate)
+    x
   } catch (err) {
     next(err)
   }
@@ -183,11 +123,6 @@ async function deleteUser(req, res, next) {
   } catch (err) {
     next(err)
   }
-
-
-
 }
-
-
 
 module.exports = router

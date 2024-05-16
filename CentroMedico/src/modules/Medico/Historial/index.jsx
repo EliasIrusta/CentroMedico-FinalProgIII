@@ -2,7 +2,6 @@ import { Table, Button, DatePicker, } from 'antd'
 import { useState, useEffect } from 'react'
 import turnoService from '../../../services/turnoApi'
 import pacienteService from '../../../services/pacientesApi'
-import { Link } from 'react-router-dom';
 
 const columns = [
   {
@@ -46,30 +45,21 @@ function Historial() {
     setRefresh(false)
     const tokenUsuario = localStorage.getItem('miToken')
     const idUsuario = localStorage.getItem('miId')
-    //console.log(tokenUsuario)
     console.log('IDUsuariodeH',idUsuario)
-    
-    
-    //console.log(turnos)
   }, [refresh])
 
   const onClick = () => {
     const fetchData = async () => {
       const response = await turnoService.getAllTurnos()
-      console.log(response)
       setTurnos(response)
     }
     fetchData()
   }
 
   const handleFechaChange = (date, dateString) => {
-    //setFechaSeleccionada(dateString);
-    console.log(dateString)
-
     const fetchData = async () => {
       const fecha = { fechaTurno: dateString }
       const response = await turnoService.buscarTurnoPorFecha(fecha)
-      //console.log(response)
       setTurnos(response)
     }
     fetchData()
@@ -78,13 +68,11 @@ function Historial() {
   useEffect(() => {
     traerTurnos()
     setRefresh(false)
-    //console.log(turnos)
   }, [refresh])
   const traerTurnos = async () => {
     try {
       const response = await turnoService.getAllTurnos();
       const idUsuario = localStorage.getItem('miId');
-      console.log('idusuario para comparar',idUsuario)
       const turnosConMedico = await Promise.all(response.map(async (turno) => {
         if (turno.medico_id === idUsuario) { // Comparar el id del médico con el id del usuario
           const pacientes = await pacienteService.getAllPacientes();
@@ -93,9 +81,9 @@ function Historial() {
             return { ...turno, medico: { nombre: medico.firstName, apellido: medico.lastName, especialidad: medico.especialidad } };
           }
         }
-        return null; // Si el turno no coincide con el id del usuario, retornar null
+        return null; 
       }));
-      setTurnos(turnosConMedico.filter(turno => turno)); // Eliminar los turnos que son null
+      setTurnos(turnosConMedico.filter(turno => turno)); 
     } catch (error) {
       console.error("Error al obtener los turnos:", error);
     }
@@ -106,9 +94,9 @@ function Historial() {
       
 
       </div>
-        <h2 >TURNOS </h2>
+        <h2 >Historial de Turnos </h2>
         <Table
-          dataSource={turnos.filter((x) => x.estado === 'completado')}
+          dataSource={turnos.filter((x) => x.estado !== 'pendiente')}
           columns={columns}
           rowKey="_id"
           pagination={{ pageSize: 10 }}

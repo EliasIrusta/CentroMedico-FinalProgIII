@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const env_path = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
 require('dotenv').config({ path: env_path })
 

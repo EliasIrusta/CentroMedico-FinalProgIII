@@ -3,13 +3,12 @@ import { Outlet } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import {
   HomeOutlined,
-
   UserOutlined,
   MedicineBoxOutlined,
   ScheduleOutlined,
   ScheduleTwoTone,
   CloseSquareOutlined,
-  DollarOutlined
+  DollarOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu, theme } from 'antd'
 
@@ -26,35 +25,50 @@ function getItem(label, key, icon, children) {
 
 const items = [
   getItem(<Link to="/"> Home </Link>, '1', <HomeOutlined />),
-
-  getItem(<Link to="/usuarios/create"> Crear Usuarios </Link>, '2', <UserOutlined />),
-
+  getItem(
+    <Link to="/usuarios/create"> Crear Usuarios </Link>,
+    '2',
+    <UserOutlined />,
+  ),
   getItem(<Link to="/medicos"> Medicos </Link>, '5', <MedicineBoxOutlined />, [
-    getItem(<Link to="/usuarios/list"> Listar Medicos</Link>, '4', <UserOutlined />),
-  ]),
-
-  getItem(<Link to="/pacientes"> Pacientes </Link>, '6', <MedicineBoxOutlined />, [
-    getItem(<Link to="/pacientes/list"> Listar Pacientes</Link>, '7', <UserOutlined />),
-
-  ]),
-
-  getItem(<Link to="/turnos"> Turnos </Link>, '8', <ScheduleOutlined />, [
-
-    getItem(<Link to="/turnos/Buscar"> Buscar Turnos</Link>, '11', <ScheduleTwoTone />),
-    ,
-    getItem(<Link to="/turnos/Modificar"> Modificar Turno</Link>, '10', <ScheduleTwoTone />),
-    ,
-
-  
+    getItem(
+      <Link to="/usuarios/list"> Listar Medicos</Link>,
+      '4',
+      <UserOutlined />,
+    ),
   ]),
   getItem(
-    <Link to="/Cobros"> Cobros </Link>,'15', <DollarOutlined />
+    <Link to="/pacientes"> Pacientes </Link>,
+    '6',
+    <MedicineBoxOutlined />,
+    [
+      getItem(
+        <Link to="/pacientes/list"> Listar Pacientes</Link>,
+        '7',
+        <UserOutlined />,
+      ),
+    ],
   ),
+  getItem(<Link to="/turnos"> Turnos </Link>, '8', <ScheduleOutlined />, [
+    getItem(
+      <Link to="/turnos/Buscar"> Buscar Turnos</Link>,
+      '11',
+      <ScheduleTwoTone />,
+    ),
+    ,
+    getItem(
+      <Link to="/turnos/Modificar"> Modificar Turno</Link>,
+      '10',
+      <ScheduleTwoTone />,
+    ),
+    ,
+  ]),
+  getItem(<Link to="/Cobros"> Cobros </Link>, '15', <DollarOutlined />),
 
   getItem(
     <Link to="/Login/Logout"> Logout </Link>,
     '9',
-    <CloseSquareOutlined />
+    <CloseSquareOutlined />,
   ),
 ]
 
@@ -82,11 +96,11 @@ const App = () => {
           items={items}
         ></Menu>
       </Sider>
-      <Layout style={{ width: '100%' }}>
+      <Layout style={{ width: '100%' }} className="section-background">
         <Header
           style={{
             padding: 0,
-            background: colorBgContainer,
+            background: 'var(--color-bg-container)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
@@ -102,7 +116,7 @@ const App = () => {
           <div
             style={{
               height: '100%',
-              background: colorBgContainer,
+              background: 'var(--color-bg-container)',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
@@ -115,9 +129,10 @@ const App = () => {
         <Footer
           style={{
             textAlign: 'center',
+            background: 'var(--color-bg-container)',
           }}
         >
-          Ant Design ©2023 Created by Ant UED
+          Centro Médico - Final de Programación III - 2024
         </Footer>
       </Layout>
     </Layout>

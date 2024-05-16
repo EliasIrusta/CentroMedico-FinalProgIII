@@ -1,9 +1,7 @@
 const express = require('express')
-//const bcrypt = require('bcrypt')
 const User = require('../schemas/user')
-const Role = require('../schemas/role')
 const Turno = require('../schemas/turno')
-//const Role = require('../schemas/role')
+const Role = require('../schemas/role')
 const mongoose = require('mongoose')
 
 const router = express.Router()
@@ -24,7 +22,7 @@ async function getTurnoById(req, res, next) {
 
   try {
     const turno = await Turno.findById(req.params.id)
-    console.log('turno del back', turno);
+    console.log('turno del back', turno)
 
     if (!turno || turno.length == 0) {
       res.status(404).send('turno not found')
@@ -36,19 +34,11 @@ async function getTurnoById(req, res, next) {
   }
 }
 
-
 async function createTurno(req, res, next) {
   console.log('createTurno: ', req.body)
   const turno = req.body
-
   try {
-    // Validar si el usuario tiene permisos para crear clientes
-    /*     if (!req.isAdmin()) {
-      return res.status(403).send('Unauthorized');
-    } */
-
     const turnoCreated = await Turno.create(turno)
-
     res.send(turnoCreated)
   } catch (err) {
     next(err)
@@ -57,7 +47,6 @@ async function createTurno(req, res, next) {
 
 async function getAllTurnos(req, res) {
   console.log('getAllTurnos  ')
-
   try {
     const turnos = await Turno.find()
     res.send(turnos)
@@ -66,26 +55,12 @@ async function getAllTurnos(req, res) {
   }
 }
 
-/* 
-async function getAllTurnos(req, res) {
-  console.log('getAllTurnos  ')
-
-  try {
-    const turnos = await Turno.find({ estado: 'pendiente' })
-    res.send(turnos)
-  } catch (err) {
-    console.log(err)
-  }
-} */
 
 async function buscarTurnosPorFecha(req, res, next) {
   try {
     console.log('Fecha a buscar: ')
     console.log(req.body)
-    const fecha = req.body.fechaTurno // Puedes recibir la fecha como parámetro de la solicitud
-
-    // Validar si la fecha es válida antes de realizar la búsqueda
-
+    const fecha = req.body.fechaTurno
     const turnos = await Turno.find({ fechaTurno: fecha })
     res.send(turnos)
   } catch (err) {
@@ -101,56 +76,39 @@ async function editarTurno(req, res, next) {
     const nuevaFecha = req.body.fechaTurno
     const nuevaHora = req.body.horaTurno
     const nuevoTratamiento = req.body.tratamiento
-    
-
-    // Validar si el ID del turno es válido antes de realizar la actualización
     if (!mongoose.Types.ObjectId.isValid(turnoId)) {
       return res.status(400).send('ID de turno no válido')
     }
-
-    // Realizar la actualización del turno por su ID
     const turnoActualizado = await Turno.findByIdAndUpdate(
       turnoId,
-      { estado: nuevoEstado, fechaTurno: nuevaFecha, horaTurno: nuevaHora , tratamiento: nuevoTratamiento},
+      {
+        estado: nuevoEstado,
+        fechaTurno: nuevaFecha,
+        horaTurno: nuevaHora,
+        tratamiento: nuevoTratamiento,
+      },
       { new: true },
-      console.log('delservice',turnoId,nuevoEstado,nuevoTratamiento)
+      console.log('delservice', turnoId, nuevoEstado, nuevoTratamiento),
     )
-
-    // Verificar si el turno se encontró y se actualizó correctamente
     if (!turnoActualizado) {
       return res.status(404).send('Turno no encontrado')
     }
-
-    // Enviar la respuesta con el turno actualizado
     res.json(turnoActualizado)
   } catch (err) {
     next(err)
   }
 }
 
-
-
-
-
-
 async function borrarTurno(req, res, next) {
   try {
-    const turnoId = req.params.id // Obtener el ID del turno de los parámetros de la solicitud
-
-    // Validar si el ID del turno es válido antes de realizar el borrado
+    const turnoId = req.params.id
     if (!mongoose.Types.ObjectId.isValid(turnoId)) {
       return res.status(400).send('ID de turno no válido')
     }
-
-    // Realizar el borrado del turno por su ID
     const turnoBorrado = await Turno.findByIdAndDelete(turnoId)
-
-    // Verificar si el turno se encontró y se borró correctamente
     if (!turnoBorrado) {
       return res.status(404).send('Turno no encontrado')
     }
-
-    // Enviar la respuesta con el turno borrado
     res.json(turnoBorrado)
   } catch (err) {
     next(err)

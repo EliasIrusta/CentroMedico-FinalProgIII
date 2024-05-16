@@ -1,5 +1,5 @@
 import axios from 'axios'
-// import localStorage from './localStorage'
+
 const api = axios.create({
   baseURL: 'http://localhost:3000/',
   timeout: 1000 * 15, // 15 sec
@@ -11,22 +11,15 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // const data = localStorage.get() // Before request is sent
-    // if (data) {
-    //   // eslint-disable-next-line no-param-reassign
-    //   config.headers.common.Authorization = `${data.token}`
-    // }
+    
     return config
   },
-  (error) => Promise.reject(error) // Do something with request error
+  (error) => Promise.reject(error),
 )
 
 api.interceptors.response.use(
-  (response) => response.data, // Do something with response data
-  (error) =>
-    // Do something with response error
-
-    Promise.reject(console.log(error))
+  (response) => response.data,
+  (error) => Promise.reject(console.log(error)),
 )
 
 export default api

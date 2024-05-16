@@ -12,3 +12,15 @@ nav ul {
   list-style: none;
   min-width: 400px;
 }
+section {
+  min-height: 100vh;
+  background-image: url('../assets/backgroundM.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+:root {
+  --color-bg-container: rgba(255, 255, 255, 0.2);
+}

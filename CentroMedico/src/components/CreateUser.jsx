@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { Button, Cascader, Form, Input, Select } from 'antd';
-import userService from '../services/userApi';
+import React, { useState } from 'react'
+import { Button, Cascader, Form, Input, Select } from 'antd'
+import userService from '../services/userApi'
 
-const { Option } = Select;
-
+const { Option } = Select
 
 const formItemLayout = {
     labelCol: {
@@ -14,18 +13,16 @@ const formItemLayout = {
         xs: { span: 24 },
         sm: { span: 16 },
     },
-};
+}
 
 const tailFormItemLayout = {
     wrapperCol: {
         xs: { span: 24, offset: 0 },
         sm: { span: 16, offset: 8 },
     },
-};
-
+}
 
 const roles = [
-
     {
         value: 'paciente',
         label: 'Paciente',
@@ -38,7 +35,7 @@ const roles = [
         value: 'admin',
         label: 'admin',
     },
-];
+]
 
 const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -47,36 +44,34 @@ const prefixSelector = (
             <Option value="1">+1</Option>
         </Select>
     </Form.Item>
-);
+)
 
 const App = () => {
-    const [form] = Form.useForm();
-    const [rol, setRol] = useState('');
+    const [form] = Form.useForm()
+    const [rol, setRol] = useState('')
 
     const onFinish = async (values) => {
         try {
-            console.log('Received values of form:', values);
+            console.log('Received values of form:', values)
 
-            const response = await userService.createUser(values);
-            console.log('Respuesta del servidor:', response);
+            const response = await userService.createUser(values)
+            console.log('Respuesta del servidor:', response)
 
-            console.log('¡El usuario se ha creado exitosamente!', values);
+            console.log('¡El usuario se ha creado exitosamente!', values)
 
             // Redirigir a la página de lista de usuarios después del éxito
-            window.location.href = "/usuarios/create";
+            window.location.href = '/usuarios/create'
         } catch (error) {
-            console.error('Error al crear el usuario:', error);
+            console.error('Error al crear el usuario:', error)
             // Manejar el error de manera adecuada, según tus necesidades
         }
-    };
+    }
 
     const handleRolChange = (value) => {
+        setRol(value)
 
-        setRol(value);
-
-        console.log(rol);
-
-    };
+        console.log(rol)
+    }
 
     return (
         <Form
@@ -91,18 +86,24 @@ const App = () => {
             <Form.Item
                 name="rol"
                 label="Rol de usuario"
-                rules={[{ type: 'array', required: true, message: 'Por favor, selecciona un rol' }]}
+                rules={[
+                    {
+                        type: 'array',
+                        required: true,
+                        message: 'Por favor, selecciona un rol',
+                    },
+                ]}
             >
-
                 <Cascader options={roles} onChange={handleRolChange} />
-
             </Form.Item>
 
             {rol == 'medico' && (
                 <Form.Item
                     name="especialidad"
                     label="Especialidad"
-                    rules={[{ required: true, message: 'Por favor, ingresa tu especialidad' }]}
+                    rules={[
+                        { required: true, message: 'Por favor, ingresa tu especialidad' },
+                    ]}
                 >
                     <Input />
                 </Form.Item>
@@ -132,24 +133,31 @@ const App = () => {
                 <Input />
             </Form.Item>
 
-
-
             {rol == 'paciente' && (
                 <Form.Item
                     name="bornDate"
                     label="Fecha de Nacimiento"
-                    rules={[{ required: true, message: 'Por favor, ingresa tu fecha de nacimiento' }]}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Por favor, ingresa tu fecha de nacimiento',
+                        },
+                    ]}
                 >
                     <Input type="date" />
                 </Form.Item>
             )}
 
-            
-
             <Form.Item
                 name="email"
                 label="E-mail"
-                rules={[{ type: 'email', message: 'Ingresa un correo electrónico válido' }, { required: true, message: 'Por favor, ingresa tu correo electrónico' }]}
+                rules={[
+                    { type: 'email', message: 'Ingresa un correo electrónico válido' },
+                    {
+                        required: true,
+                        message: 'Por favor, ingresa tu correo electrónico',
+                    },
+                ]}
             >
                 <Input />
             </Form.Item>
@@ -157,7 +165,9 @@ const App = () => {
             <Form.Item
                 name="password"
                 label="Password"
-                rules={[{ required: true, message: 'Por favor, ingresa tu contraseña' }]}
+                rules={[
+                    { required: true, message: 'Por favor, ingresa tu contraseña' },
+                ]}
                 hasFeedback
             >
                 <Input.Password />
@@ -173,16 +183,15 @@ const App = () => {
                     ({ getFieldValue }) => ({
                         validator(_, value) {
                             if (!value || getFieldValue('password') === value) {
-                                return Promise.resolve();
+                                return Promise.resolve()
                             }
-                            return Promise.reject(new Error('Las contraseñas no coinciden'));
+                            return Promise.reject(new Error('Las contraseñas no coinciden'))
                         },
                     }),
                 ]}
             >
                 <Input.Password />
             </Form.Item>
-
 
             <Form.Item
                 name="phone"
@@ -192,14 +201,13 @@ const App = () => {
                 <Input addonBefore={prefixSelector} style={{ width: '100%' }} />
             </Form.Item>
 
-
             <Form.Item {...tailFormItemLayout}>
                 <Button type="primary" htmlType="submit">
                     Registrarse
                 </Button>
             </Form.Item>
         </Form>
-    );
-};
+    )
+}
 
-export default App;
+export default App

@@ -1,10 +1,5 @@
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors')
-// const fs = require('fs')
-// const path = require('path')
-
-/* eslint-disable-next-line no-undef */
-// const publicKey = fs.readFileSync(path.join(__dirname, `../keys/base-api-express-generator.pub`))
 
 function getToken(req, next) {
   const TOKEN_REGEX = /^\s*Bearer\s+(\S+)/g
@@ -27,16 +22,10 @@ function authentication(req, res, next) {
   const token = getToken(req, next)
 
   try {
-    // Unsecure alternative
+  
     req.user = jwt.verify(token, 'base-api-express-generator', {
       issuer: 'base-api-express-generator',
     })
-
-    // Correct alternative
-    // req.user = jwt.verify(token, publicKey, {
-    //   algorithms: ['RS256'],
-    //   issuer: 'base-api-express-generator',
-    // })
 
     if (!req.user || !req.user._id || !req.user.role) {
       console.error('Error authenticating malformed JWT')

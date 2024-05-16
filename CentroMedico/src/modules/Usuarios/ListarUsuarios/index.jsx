@@ -19,10 +19,9 @@ function ListarPacientes() {
   }, [])
 
   const handleDelete = (id) => {
-    // Eliminar el usuario con el ID proporcionado de la lista de usuarios
-    setUsuarios(usuarios.filter((user) => user.id !== id));
+    setUsuarios(usuarios.filter((user) => user.id !== id))
     window.location.reload()
-  };
+  }
 
   const columns = [
     {
@@ -44,13 +43,10 @@ function ListarPacientes() {
       title: 'Acciones',
       key: 'acciones',
       render: (text, record) => (
-        <Character
-          data={record}
-          onDelete={handleDelete}
-        />
+        <Character data={record} onDelete={handleDelete} />
       ),
     },
-  ];
+  ]
 
   return (
     <>
@@ -62,19 +58,21 @@ function ListarPacientes() {
       ) : (
         <Table
           columns={columns}
-          dataSource={usuarios.filter((x) => x.role.name === 'medico').map((x) => ({
-            key: x._id,
-            nombre: x.firstName,
-            apellido: x.lastName,
-            dni: x.dni,
-            phone: x.phone,
-          
-            id: x._id,
-          }))}
+          dataSource={usuarios
+            .filter((x) => x.role.name === 'medico')
+            .map((x) => ({
+              key: x._id,
+              nombre: x.firstName,
+              apellido: x.lastName,
+              dni: x.dni,
+              phone: x.phone,
+
+              id: x._id,
+            }))}
         />
       )}
     </>
-  );
+  )
 }
 
-export default ListarPacientes;
+export default ListarPacientes

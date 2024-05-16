@@ -19,7 +19,6 @@ const initialUsers = [
     __v: 0,
   },
 
-  
   {
     _id: new ObjectId('000000000000000000000001'),
     email: 'elias@i.com',
