@@ -159,43 +159,7 @@ function Cobros() {
     }
   };
 
-  const handlePagoTarjeta = async () => {
-    try {
-      if (!categoriaPago) {
-        message.error('Debe seleccionar una categoría de pago primero!');
-        return;
-      }
 
-      let monto = 0;
-      switch (categoriaPago) {
-        case 'primera-consulta':
-          monto = 5000;
-          break;
-        case 'consulta':
-          monto = 3500;
-          break;
-        case 'control':
-          monto = 2500;
-          break;
-        default:
-          monto = 0;
-      }
-
-      const pagoData = {
-        turno_id: selectedTurno._id,
-        categoria: categoriaPago,
-        monto: monto.toString(),
-        metodoPago: 'tarjeta',
-      };
-
-      await pagosService.createPago(pagoData);
-
-      message.success('¡Pago inicializado con tarjeta!');
-    } catch (error) {
-      console.error('Error al inicializar el pago con tarjeta:', error);
-      message.error('¡Error al inicializar el pago con tarjeta!');
-    }
-  };
   
   return (
     <div>
@@ -221,7 +185,7 @@ function Cobros() {
           <Link
             to={categoriaPago ? `PaymentForm/${selectedTurno?._id}` : '#'}
             key="tarjeta"
-            onClick={handlePagoTarjeta}
+            onClick={() => handlePago('tarjeta')}
           >
             <Button type="primary">Tarjeta de Crédito</Button>
           </Link>,

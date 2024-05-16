@@ -111,6 +111,11 @@ function Turnos() {
     fetchData()
   }
 
+  const disabledDate = (current) => {
+    // Can not select days before today
+    return current && current < moment().startOf('day');
+  };
+
   return (
     <div>
       <h2>Cargar turno</h2>
@@ -225,7 +230,7 @@ function Turnos() {
           labelCol={{ span: 12 }}
           wrapperCol={{ span: 12 }}
         >
-          <DatePicker showTime format="YYYY-MM-DD HH:mm" />
+          <DatePicker showTime={{ minuteStep: 15, format: 'HH:mm' }}   format="YYYY-MM-DD HH:mm" />
         </Form.Item>
 
         <Form.Item
