@@ -1,7 +1,7 @@
 --------------------------------------------------------------------
 
 para iniciar el back
-cd CentroMedico
+cd Database
 npm install
 npm run migrate-dev up
 npm start
@@ -10,7 +10,7 @@ npm start
 
 para iniciar el front
 
-cd client
+cd CentroMedico
 npm install
 npm run dev
 -------------------------------------------------------------------
